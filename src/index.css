@@ -1,11 +1,8 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,56 +10,164 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
+  font-family: 'Arial', sans-serif;
+  background-color: antiquewhite;
+  color: black;
   margin: 0;
+  padding: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.app {
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.app-header {
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: black;
+}
+
+.todo-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.todo-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.todo-input:focus {
+  outline: none;
+  border: 1px solid dimgray;
+}
+
+.button {
+  width: 100px;
+  height: 45px;
+  padding: 12px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.button:hover {
+  background-color: dimgray;
+}
+
+.button.active {
+  background-color: darkred;
+  color: white;
+  cursor: not-allowed;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.todo-item:hover {
+  background-color: #fdf6e3;
+}
+
+.todo-item--checkbox {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid dimgray;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  background-color: white;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.todo-item--checkbox:checked {
+  background-color: darkred;
+  border-color: darkred;
+}
+
+.todo-item--checkbox:checked::after {
+  content: "✔";
+  position: absolute;
+  top: -1px;
+  left: 1px;
+  font-size: 12px;
+  color: white;
+}
+
+.todo-item--text {
+  flex: 1;
+  margin: 0px 10px;
+  font-size: 16px;
+}
+
+.todo-item--action {
+  display: flex;
+  gap: 5px;
+}
+
+.todo-item--action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.todo-item--action-button:hover {
+  transform: scale(1.2);
+}
+
+.completed {
+  text-decoration: line-through;
+  cursor: pointer;
+  color: darkred;
+}
+
+.task-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0 25px;
+}
+
+.error-message {
+  color: darkred;
+  font-size: 10px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  font-weight: 500;
 }
