@@ -1,5 +1,7 @@
 import * as React from "react";
 import type {Todo} from "../types/todo.ts";
+import PenSvg from "../../public/pen.svg"
+import TrashSvg from "../../public/trash.svg"
 
 interface TodoProps {
   task: Todo;
@@ -19,8 +21,12 @@ export const TodoList:React.FC<TodoProps> = ({task, toggleComplete, editTodo, de
       />
       <p className={`todo-item--text ${task.isDone ? "completed" : ""}`}>{task.title}</p>
       <div className="todo-item--action">
-        <button className="todo-item--action-button" onClick={editTodo}>✏️</button>
-        <button className="todo-item--action-button" onClick={deleteTodo}>🗑</button>
+        <button className="todo-item--action-button" onClick={editTodo}>
+          <img src={PenSvg} alt="edit a task" width={25} height={25} />️
+        </button>
+        <button className="todo-item--action-button" onClick={deleteTodo}>
+          <img src={TrashSvg} alt="delete a task" width={25} height={25} />
+        </button>
       </div>
     </div>
   )

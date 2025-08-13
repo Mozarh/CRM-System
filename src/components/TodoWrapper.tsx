@@ -3,9 +3,9 @@ import {TodoForm} from "./TodoForm.tsx";
 import {TodoList} from "./Todo.tsx";
 import {TaskTabs} from "./TaskTabs.tsx";
 import {EditTodoForm} from "./EditTodoForm.tsx";
-import type {FilterStatus, MetaResponse, Todo, TodoInfo} from "../types/todo.ts";
+import type {FilterStatus, Todo, TodoInfo} from "../types/todo.ts";
+import {todoApi} from "../api/todoApi.ts";
 
-const API_URL = "https://easydev.club/api/v1";
 
 export const TodoWrapper = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -14,12 +14,13 @@ export const TodoWrapper = () => {
   const [editing, setEditing] = useState<number | null>(null);
 
   const fetchTodos = async (filter: FilterStatus) => {
-    const query = filter === "all" ? "" : `?filter=${filter}`;
-    const res = await fetch(`${API_URL}/todos${query}`);
-    if(!res.ok) return;
-    const json: MetaResponse<Todo, TodoInfo> = await res.json();
-    setTodos(json.data)
-    if(json.info) setCounts(json.info)
+    try {
+      const res = await todoApi.getTodos(filter);
+      setTodos(res.data)
+      if(res.info) setCounts(res.info)
+    } catch (error) {
+      console.error("Ошибка при получении задач", error)
+    }
   };
 
   useEffect(()=>{
@@ -27,38 +28,40 @@ export const TodoWrapper = () => {
   }, [activeTab]);
 
   const addTodo = async (title: string) => {
-    await fetch(`${API_URL}/todos`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({title, isDone: false}),
-    });
-    fetchTodos(activeTab)
+    try {
+      await todoApi.addTodo({title, isDone: false});
+      fetchTodos(activeTab)
+    } catch (error) {
+      console.error("Ошибка при добавлении задачи:", error);
+    }
   };
 
   const toggleComplete = async (id: number, isDone: boolean ) => {
-    await fetch(`${API_URL}/todos/${id}`, {
-      method: "PUT",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({isDone: !isDone}),
-    });
-    fetchTodos(activeTab)
-  };
+    try {
+      await todoApi.updateTodo(id, {isDone: !isDone})
+      fetchTodos(activeTab)
+    } catch (error) {
+      console.error("Ошибка при обновлении задачи:", error);
+    }
+  }
 
   const deleteTodo = async (id: number) => {
-    await fetch(`${API_URL}/todos/${id}`, {
-      method: "DELETE",
-    });
-    fetchTodos(activeTab)
+    try {
+      await todoApi.deleteTodo(id)
+      fetchTodos(activeTab)
+    } catch (error) {
+      console.error("Ошибка при удалении задачи:", error);
+    }
   }
 
   const editTask = async (title: string, id: number) => {
-    await fetch(`${API_URL}/todos/${id}`, {
-      method: "PUT",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({title}),
-    })
-    setEditing(null);
-    fetchTodos(activeTab)
+    try {
+      await todoApi.updateTodo(id, {title});
+      setEditing(null);
+      fetchTodos(activeTab)
+    } catch (error) {
+      console.error("Ошибка при редактировании задачи:", error);
+    }
   }
 
   return (
