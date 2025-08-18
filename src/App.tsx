@@ -1,12 +1,7 @@
-import './App.css'
-import {TodoWrapper} from "./components/TodoWrapper.tsx";
+import { TodoListPage } from './pages/TodoListPage/TodoListPage.tsx';
 
 function App() {
-  return (
-    <div>
-      <TodoWrapper />
-    </div>
-  )
+  return <TodoListPage />;
 }
 
-export default App
+export default App;

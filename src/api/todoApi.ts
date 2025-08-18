@@ -1,11 +1,17 @@
-import type {FilterStatus, MetaResponse, Todo, TodoInfo, TodoRequest} from "../types/todo.ts";
+import type {
+  FilterStatus,
+  MetaResponse,
+  Todo,
+  TodoInfo,
+  TodoRequest,
+} from '../types/todo.ts';
 
-const API_URL = "https://easydev.club/api/v1";
+const API_URL = 'https://easydev.club/api/v1';
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   try {
     const response = await fetch(`${API_URL}${url}`, {
-      headers: {"Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
       ...options,
     });
     if (!response.ok) {
@@ -18,33 +24,36 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
   }
 }
 
-export const todoApi ={
+export async function getTodos(
+  status?: FilterStatus
+): Promise<MetaResponse<Todo, TodoInfo>> {
+  const params = new URLSearchParams();
+  if (status && status !== 'all') {
+    params.append('filter', status);
+  }
+  const query = params.toString();
+  return await request<MetaResponse<Todo, TodoInfo>>(
+    `/todos${query ? `?${query}` : ''}`
+  );
+}
 
-  async getTodos(status?: FilterStatus) {
-    const query = status && status !== "all" ? `?filter=${status}` : "";
-    return await request<MetaResponse<Todo, TodoInfo>>(
-      `/todos${query}`,
-    )
-  },
+export async function addTodo(data: TodoRequest): Promise<Todo> {
+  return await request<Todo>(`/todos`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
 
-  async addTodo(data: TodoRequest) {
-    return await request<Todo>(`/todos`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-  },
+export async function updateTodo(id: number, data: TodoRequest): Promise<Todo> {
+  return await request<Todo>(`/todos/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
 
-  async updateTodo(id: number, data: TodoRequest) {
-    return await request<Todo>(`/todos/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    })
-  },
-
-  async deleteTodo(id: number) {
-    await fetch(`${API_URL}/todos/${id}`, {
-      method: "DELETE",
-    })
-    return {success: true}
-  },
+export async function deleteTodo(id: number): Promise<{ success: boolean }> {
+  await fetch(`${API_URL}/todos/${id}`, {
+    method: 'DELETE',
+  });
+  return { success: true };
 }
