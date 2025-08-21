@@ -4,22 +4,14 @@ import type { Todo } from '../../types/todo.ts';
 
 interface TodoListProps {
   todos: Todo[];
-  editingId: number | null;
-  toggleComplete: (id: number, isDone: boolean) => void;
-  deleteTodo: (id: number) => void;
-  startEdit: (id: number) => void;
-  cancelEdit: () => void;
-  saveEdit: (title: string, id: number) => void;
+  onTaskChanged: () => void;
+  onTaskDeleted: () => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
-  editingId,
-  toggleComplete,
-  deleteTodo,
-  startEdit,
-  cancelEdit,
-  saveEdit,
+  onTaskChanged,
+  onTaskDeleted,
 }) => {
   return (
     <div>
@@ -27,12 +19,8 @@ export const TodoList: React.FC<TodoListProps> = ({
         <TodoItem
           key={todo.id}
           task={todo}
-          toggleComplete={() => toggleComplete(todo.id, todo.isDone)}
-          deleteTodo={() => deleteTodo(todo.id)}
-          startEdit={() => startEdit(todo.id)}
-          cancelEdit={cancelEdit}
-          saveEdit={saveEdit}
-          isEditing={editingId === todo.id}
+          onTaskChanged={onTaskChanged}
+          onTaskDeleted={onTaskDeleted}
         />
       ))}
     </div>

@@ -7,39 +7,70 @@ import CancelSvg from '../../../public/cancel.svg';
 import styles from './TodoItem.module.css';
 import { validationTodoTitle } from '../../helpers/validation.ts';
 import { ButtonIcon } from '../../ui/ButtonIcon/ButtonIcon.tsx';
+import {deleteTodo, updateTodo} from "../../api/todoApi.ts";
 
 interface TodoProps {
   task: Todo;
-  toggleComplete: () => void;
-  deleteTodo: () => void;
-  startEdit: () => void;
-  cancelEdit: () => void;
-  saveEdit: (title: string, id: number) => void;
-  isEditing: boolean;
+  onTaskChanged: () => void;
+  onTaskDeleted: () => void;
 }
 
 export const TodoItem: React.FC<TodoProps> = ({
   task,
-  toggleComplete,
-  deleteTodo,
-  startEdit,
-  cancelEdit,
-  saveEdit,
-  isEditing,
+  onTaskChanged,
+  onTaskDeleted,
 }) => {
   const [title, setTitle] = useState<string>(task.title);
+  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string>('');
   const [touched, setTouched] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleToggleComplete = async () => {
+    try {
+      setLoading(true);
+      await updateTodo(task.id, { isDone: !task.isDone });
+      onTaskChanged()
+    } catch (error) {
+      alert('Ошибка при обновлении задачи');
+      console.error('Ошибка при обновлении задачи:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      await deleteTodo(task.id);
+      onTaskDeleted();
+    } catch (error) {
+      alert('Ошибка при удалении задачи');
+      console.error('Ошибка при удалении задачи:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const errorMsg = validationTodoTitle(title);
+    const errorMsg = validationTodoTitle(title)
     if (errorMsg) {
       setError(errorMsg);
       return;
     }
-    saveEdit(title.trim(), task.id);
-  };
+    try {
+      setLoading(true);
+      await updateTodo(task.id, { title: title.trim() });
+      setIsEditing(false);
+      onTaskChanged()
+    } catch (error) {
+      alert('Ошибка при редактировании задачи');
+      console.error('Ошибка при редактировании задачи:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -56,7 +87,7 @@ export const TodoItem: React.FC<TodoProps> = ({
   return (
     <>
       {isEditing ? (
-        <form onSubmit={handleSubmit} className={styles.todoForm}>
+        <form onSubmit={handleSave} className={styles.todoForm}>
           <div className={styles.inputWrapper}>
             <input
               className={styles.todoInput}
@@ -66,6 +97,7 @@ export const TodoItem: React.FC<TodoProps> = ({
               placeholder="Changing the task?"
               onChange={handleChange}
               onBlur={handleBlur}
+              disabled={loading}
             />
             <div className={styles.errorWrapper}>
               <p
@@ -86,7 +118,7 @@ export const TodoItem: React.FC<TodoProps> = ({
             alt="Cancel"
             size={30}
             type="button"
-            onClick={cancelEdit}
+            onClick={() => setIsEditing(false)}
           />
         </form>
       ) : (
@@ -95,7 +127,8 @@ export const TodoItem: React.FC<TodoProps> = ({
             className={styles.todoCheckbox}
             type="checkbox"
             checked={task.isDone}
-            onChange={toggleComplete}
+            onChange={handleToggleComplete}
+            disabled={loading}
           />
           <p
             className={`${styles.todoText} ${task.isDone ? styles.completed : ''}`}
@@ -104,13 +137,13 @@ export const TodoItem: React.FC<TodoProps> = ({
           </p>
           <div className={styles.todoAction}>
             <ButtonIcon
-              onClick={startEdit}
+              onClick={()=> setIsEditing(true)}
               alt="Edit a task"
               icon={PenSvg}
               size={25}
             />
             <ButtonIcon
-              onClick={deleteTodo}
+              onClick={handleDelete}
               alt="Delete a task"
               icon={TrashSvg}
               size={25}
