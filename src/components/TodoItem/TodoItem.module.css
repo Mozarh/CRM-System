@@ -1,0 +1,93 @@
+.todoItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.todoItem:hover {
+  background-color: #fdf6e3;
+}
+
+.todoForm {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.inputWrapper {
+  flex-grow: 1;
+}
+
+.todoInput {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.errorWrapper {
+  min-height: 20px;
+  margin-top: 4px;
+}
+
+.errorMessage {
+  color: darkred;
+  font-size: 10px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+.errorVisible {
+  opacity: 1;
+}
+
+.todoCheckbox {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid dimgray;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  background-color: white;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.todoCheckbox:checked {
+  background-color: darkblue;
+  border-color: darkblue;
+}
+
+.todoCheckbox:checked::after {
+  content: "✔";
+  position: absolute;
+  top: -1px;
+  left: 1px;
+  font-size: 12px;
+  color: white;
+}
+
+.todoText {
+  flex: 1;
+  margin: 0px 10px;
+  font-size: 16px;
+}
+
+.completed {
+  text-decoration: line-through;
+  cursor: pointer;
+  color: darkblue;
+}
+
+.todoAction {
+  display: flex;
+  gap: 15px;
+}
