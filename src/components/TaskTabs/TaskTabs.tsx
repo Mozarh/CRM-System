@@ -1,7 +1,6 @@
 import type { FilterStatus } from '../../types/todo.ts';
 import React from 'react';
-import styles from './TaskTabs.module.css';
-import { Button } from '../../ui/Button/Button.tsx';
+import {Tabs} from "antd";
 
 interface TaskTabsProps {
   activeTab: FilterStatus;
@@ -18,31 +17,19 @@ export const TaskTabs: React.FC<TaskTabsProps> = ({
   countInWork,
   countDone,
 }) => {
+  const items = [
+    {key: "all", label: `All tasks ${countAll}`},
+    {key: "inWork", label: `In Work ${countInWork}`},
+    {key: "completed", label: `Completed ${countDone}`},
+  ];
+
   return (
-    <div className={`${styles.taskTabs}`}>
-      <Button
-        variant="tab"
-        active={activeTab === 'all'}
-        onClick={() => setActiveTab('all')}
-      >
-        All Task ({countAll})
-      </Button>
-
-      <Button
-        variant="tab"
-        active={activeTab === 'inWork'}
-        onClick={() => setActiveTab('inWork')}
-      >
-        In Work ({countInWork})
-      </Button>
-
-      <Button
-        variant="tab"
-        active={activeTab === 'completed'}
-        onClick={() => setActiveTab('completed')}
-      >
-        Done ({countDone})
-      </Button>
-    </div>
+    <Tabs
+      activeKey={activeTab}
+      onChange={(key) => setActiveTab(key as FilterStatus)}
+      items={items}
+      centered
+      style={{ marginBottom: 25 }}
+    />
   );
 };
