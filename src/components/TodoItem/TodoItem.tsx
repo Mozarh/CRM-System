@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import type { Todo } from '../../types/todo.ts';
-import PenSvg from '../../../public/pen.svg';
-import TrashSvg from '../../../public/trash.svg';
-import UpdateSvg from '../../../public/update.svg';
-import CancelSvg from '../../../public/cancel.svg';
-import styles from './TodoItem.module.css';
 import { validationTodoTitle } from '../../helpers/validation.ts';
-import { ButtonIcon } from '../../ui/ButtonIcon/ButtonIcon.tsx';
 import {deleteTodo, updateTodo} from "../../api/todoApi.ts";
+import {Button, Checkbox, Form, Input, message, Space} from "antd";
+import {  CheckOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 interface TodoProps {
   task: Todo;
@@ -15,16 +11,18 @@ interface TodoProps {
   onTaskDeleted: () => void;
 }
 
+interface TodoFormValues {
+  title: string;
+}
+
 export const TodoItem: React.FC<TodoProps> = ({
   task,
   onTaskChanged,
   onTaskDeleted,
 }) => {
-  const [title, setTitle] = useState<string>(task.title);
   const [isEditing, setIsEditing] = useState(false);
-  const [error, setError] = useState<string>('');
-  const [touched, setTouched] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [form] = Form.useForm<TodoFormValues>();
 
   const handleToggleComplete = async () => {
     try {
@@ -32,7 +30,7 @@ export const TodoItem: React.FC<TodoProps> = ({
       await updateTodo(task.id, { isDone: !task.isDone });
       onTaskChanged()
     } catch (error) {
-      alert('Ошибка при обновлении задачи');
+      message.error('Ошибка при обновлении задачи');
       console.error('Ошибка при обновлении задачи:', error);
     } finally {
       setLoading(false);
@@ -45,112 +43,90 @@ export const TodoItem: React.FC<TodoProps> = ({
       await deleteTodo(task.id);
       onTaskDeleted();
     } catch (error) {
-      alert('Ошибка при удалении задачи');
+      message.error('Ошибка при удалении задачи');
       console.error('Ошибка при удалении задачи:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const errorMsg = validationTodoTitle(title)
-    if (errorMsg) {
-      setError(errorMsg);
-      return;
-    }
+  const handleSave = async (values: TodoFormValues) => {
     try {
       setLoading(true);
-      await updateTodo(task.id, { title: title.trim() });
+      await updateTodo(task.id, { title: values.title.trim() });
       setIsEditing(false);
       onTaskChanged()
     } catch (error) {
-      alert('Ошибка при редактировании задачи');
+      message.error('Ошибка при редактировании задачи');
       console.error('Ошибка при редактировании задачи:', error);
     } finally {
       setLoading(false);
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    if (touched) {
-      setError(validationTodoTitle(e.target.value));
-    }
-  };
-
-  const handleBlur = () => {
-    setTouched(true);
-    setError(validationTodoTitle(title));
-  };
+  if (isEditing) {
+    return (
+      <Form
+        form={form}
+        layout="inline"
+        onFinish={handleSave}
+        initialValues={{ title: task.title }}
+        style={{ width: '100%', marginBottom: 10 }}
+      >
+        <Form.Item
+          name="title"
+          rules={[
+            {
+              validator: async (_, value) => {
+                const errorMsg = validationTodoTitle(value);
+                return errorMsg ? Promise.reject(new Error(errorMsg)) : Promise.resolve();
+              }
+            }
+          ]}
+          style={{ flexGrow: 1, marginBottom: 0 }}
+        >
+          <Input
+            placeholder="Changing the task?"
+            disabled={loading}
+          />
+        </Form.Item>
+        <Space>
+          <Button htmlType="submit" loading={loading} icon={<CheckOutlined />} />
+          <Button
+            type="default"
+            disabled={loading}
+            icon={<CloseOutlined />}
+            onClick={() => setIsEditing(false)}
+            style={{color: 'red'}}
+          />
+        </Space>
+      </Form>
+    )
+  }
 
   return (
-    <>
-      {isEditing ? (
-        <form onSubmit={handleSave} className={styles.todoForm}>
-          <div className={styles.inputWrapper}>
-            <input
-              className={styles.todoInput}
-              type="text"
-              value={title}
-              required
-              placeholder="Changing the task?"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              disabled={loading}
-            />
-            <div className={styles.errorWrapper}>
-              <p
-                className={`${styles.errorMessage} ${error ? styles.errorVisible : ''}`}
-              >
-                {error}
-              </p>
-            </div>
-          </div>
-          <ButtonIcon
-            icon={UpdateSvg}
-            alt="Update task"
-            size={30}
-            type="submit"
-          />
-          <ButtonIcon
-            icon={CancelSvg}
-            alt="Cancel"
-            size={30}
-            type="button"
-            onClick={() => setIsEditing(false)}
-          />
-        </form>
-      ) : (
-        <div className={styles.todoItem}>
-          <input
-            className={styles.todoCheckbox}
-            type="checkbox"
+        <>
+          <Checkbox
             checked={task.isDone}
             onChange={handleToggleComplete}
             disabled={loading}
           />
           <p
-            className={`${styles.todoText} ${task.isDone ? styles.completed : ''}`}
+            style={{
+              flex: 1,
+              margin: "0 10px",
+              fontSize: 16,
+              textDecoration: task.isDone ? "line-through": "none",
+              cursor: task.isDone ? "pointer" : "default" ,
+              color: task.isDone ? "darkblue" : "inherit",
+            }}
           >
             {task.title}
           </p>
-          <div className={styles.todoAction}>
-            <ButtonIcon
-              onClick={()=> setIsEditing(true)}
-              alt="Edit a task"
-              icon={PenSvg}
-              size={25}
-            />
-            <ButtonIcon
-              onClick={handleDelete}
-              alt="Delete a task"
-              icon={TrashSvg}
-              size={25}
-            />
-          </div>
-        </div>
-      )}
-    </>
+          <Space>
+            <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} />
+            <Button icon={<DeleteOutlined />} onClick={handleDelete} style={{color: 'red'}} />
+          </Space>
+        </>
   );
 };
