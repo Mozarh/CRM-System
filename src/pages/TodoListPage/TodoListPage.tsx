@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { TodoForm } from '../../components/TodoForm/TodoForm.tsx';
-import { TaskTabs } from '../../components/TaskTabs/TaskTabs.tsx';
-import type { FilterStatus, Todo, TodoInfo } from '../../types/todo.ts';
-import { getTodos } from '../../api/todoApi.ts';
-import { TodoList } from '../../components/TodoList/TodoList.tsx';
-import styles from './TodoListPage.module.css';
+import { TodoForm } from '../components/TodoForm/TodoForm.tsx';
+import { TaskTabs } from '../components/TaskTabs/TaskTabs.tsx';
+import type { FilterStatus, Todo, TodoInfo } from '../types/todo.ts';
+import { getTodos } from '../api/todoApi.ts';
+import { TodoList } from '../components/TodoList/TodoList.tsx';
+import { Card, Typography } from 'antd';
+
+const { Title } = Typography;
 
 export const TodoListPage: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -32,9 +34,31 @@ export const TodoListPage: React.FC = () => {
     fetchTodos(activeTab);
   }, [activeTab]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchTodos(activeTab);
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [activeTab]);
+
   return (
-    <div className={styles.app}>
-      <h1 className={styles.appHeader}>Todo List</h1>
+    <Card
+      style={{
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+        borderRadius: 20,
+        width: 500,
+        padding: 20,
+      }}
+    >
+      <Title
+        style={{
+          textAlign: "center",
+          fontSize: "50px"
+      }}
+      >
+        Todo List
+      </Title>
       <TodoForm onTaskAdded={() => fetchTodos(activeTab)} />
       <TaskTabs
         activeTab={activeTab}
@@ -48,6 +72,6 @@ export const TodoListPage: React.FC = () => {
         onTaskChanged={()=> fetchTodos(activeTab)}
         onTaskDeleted={()=> fetchTodos(activeTab)}
       />
-    </div>
+    </Card>
   );
 };
