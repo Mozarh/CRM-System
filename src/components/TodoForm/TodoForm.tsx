@@ -1,29 +1,23 @@
 import React, { useState } from 'react';
-import { validationTodoTitle } from '../../helpers/validation.ts';
 import { addTodo } from '../../api/todoApi.ts';
-import {Button, Form, Input, message} from 'antd';
+import {Form, message} from 'antd';
+import type {TodoFormValues} from "../../types/todo.ts";
+import {TaskTitleForm} from "../TaskTitleForm/TaskTitleForm.tsx";
 
 interface TodoFormProps {
   onTaskAdded: () => void;
-}
-
-interface TodoFormValues {
-  title: string;
 }
 
 export const TodoForm: React.FC<TodoFormProps> = ({ onTaskAdded }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm<TodoFormValues>();
 
-  const handleSubmit = async (values: TodoFormValues) => {
+  const handleAdded = async (values: TodoFormValues) => {
     try {
       setLoading(true);
       await addTodo({ title: values.title.trim(), isDone: false });
-      form.resetFields()
-
-      if (onTaskAdded) {
-        onTaskAdded();
-      }
+      form.setFieldsValue({ title: "" });
+      onTaskAdded()
     } catch (error) {
       message.error('Ошибка при добавлении задачи');
       console.error('Ошибка при добавлении задачи:', error);
@@ -33,43 +27,12 @@ export const TodoForm: React.FC<TodoFormProps> = ({ onTaskAdded }) => {
   };
 
   return (
-    <Form
+    <TaskTitleForm
       form={form}
-      layout="inline"
-      onFinish={handleSubmit}
-      style={{
-        marginBottom: 20,
-      }}
-    >
-      <Form.Item<TodoFormValues>
-        name="title"
-        rules={[
-          {
-            validator: async (_, value) => {
-              const errorMsg = validationTodoTitle(value);
-              return errorMsg ? Promise.reject(new Error(errorMsg)) : Promise.resolve();
-            }
-          }
-        ]}
-        style={{
-          flexGrow: 1,
-        }}
-      >
-        <Input
-          placeholder={'What we plan to do?'}
-          disabled={loading}
-        />
-      </Form.Item>
-
-      <Form.Item
-        style={{
-          marginBottom: 0,
-        }}
-      >
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Add task
-        </Button>
-      </Form.Item>
-    </Form>
+      loading={loading}
+      onFinish={handleAdded}
+      isEditMode={false}
+      placeholder="What we plan to do?"
+    />
   );
 };
