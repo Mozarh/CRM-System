@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import type { Todo } from '../../types/todo.ts';
-import { validationTodoTitle } from '../../helpers/validation.ts';
+import type { Todo, TodoFormValues } from '../../types/todo.ts';
 import {deleteTodo, updateTodo} from "../../api/todoApi.ts";
-import {Button, Checkbox, Form, Input, message, Space} from "antd";
-import {  CheckOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {Button, Checkbox, message, Space} from "antd";
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {EditTodoItem} from "../EditTodoItem/EditTodoItem.tsx";
 
 interface TodoProps {
   task: Todo;
@@ -11,18 +11,13 @@ interface TodoProps {
   onTaskDeleted: () => void;
 }
 
-interface TodoFormValues {
-  title: string;
-}
-
-export const TodoItem: React.FC<TodoProps> = ({
-  task,
-  onTaskChanged,
-  onTaskDeleted,
-}) => {
+export const TodoItem: React.FC<TodoProps> = React.memo(({
+                                                           task,
+                                                           onTaskChanged,
+                                                           onTaskDeleted,
+                                                         }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [form] = Form.useForm<TodoFormValues>();
 
   const handleToggleComplete = async () => {
     try {
@@ -66,67 +61,39 @@ export const TodoItem: React.FC<TodoProps> = ({
 
   if (isEditing) {
     return (
-      <Form
-        form={form}
-        layout="inline"
-        onFinish={handleSave}
-        initialValues={{ title: task.title }}
-        style={{ width: '100%', marginBottom: 10 }}
-      >
-        <Form.Item
-          name="title"
-          rules={[
-            {
-              validator: async (_, value) => {
-                const errorMsg = validationTodoTitle(value);
-                return errorMsg ? Promise.reject(new Error(errorMsg)) : Promise.resolve();
-              }
-            }
-          ]}
-          style={{ flexGrow: 1, marginBottom: 0 }}
-        >
-          <Input
-            placeholder="Changing the task?"
-            disabled={loading}
-          />
-        </Form.Item>
-        <Space>
-          <Button htmlType="submit" loading={loading} icon={<CheckOutlined />} />
-          <Button
-            type="default"
-            disabled={loading}
-            icon={<CloseOutlined />}
-            onClick={() => setIsEditing(false)}
-            style={{color: 'red'}}
-          />
-        </Space>
-      </Form>
+      <EditTodoItem
+        initialTitle={task.title}
+        loading={loading}
+        onCancel={() => setIsEditing(false)}
+        onSave={handleSave}
+      />
     )
   }
 
   return (
-        <>
-          <Checkbox
-            checked={task.isDone}
-            onChange={handleToggleComplete}
-            disabled={loading}
-          />
-          <p
-            style={{
-              flex: 1,
-              margin: "0 10px",
-              fontSize: 16,
-              textDecoration: task.isDone ? "line-through": "none",
-              cursor: task.isDone ? "pointer" : "default" ,
-              color: task.isDone ? "darkblue" : "inherit",
-            }}
-          >
-            {task.title}
-          </p>
-          <Space>
-            <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} />
-            <Button icon={<DeleteOutlined />} onClick={handleDelete} style={{color: 'red'}} />
-          </Space>
-        </>
+    <>
+      <Checkbox
+        checked={task.isDone}
+        onChange={handleToggleComplete}
+        disabled={loading}
+      />
+      <p
+        style={{
+          flex: 1,
+          margin: "0 10px",
+          fontSize: 16,
+          textDecoration: task.isDone ? "line-through": "none",
+          cursor: task.isDone ? "pointer" : "default" ,
+          color: task.isDone ? "darkblue" : "inherit",
+        }}
+      >
+        {task.title}
+      </p>
+      <Space>
+        <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} />
+        <Button icon={<DeleteOutlined />} onClick={handleDelete} style={{color: 'red'}} />
+      </Space>
+    </>
   );
-};
+}
+)

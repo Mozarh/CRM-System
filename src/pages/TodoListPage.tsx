@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TodoForm } from '../components/TodoForm/TodoForm.tsx';
 import { TaskTabs } from '../components/TaskTabs/TaskTabs.tsx';
 import type { FilterStatus, Todo, TodoInfo } from '../types/todo.ts';
@@ -17,7 +17,7 @@ export const TodoListPage: React.FC = () => {
     inWork: 0,
   });
 
-  const fetchTodos = async (filter: FilterStatus) => {
+  const fetchTodos = useCallback(async (filter: FilterStatus) => {
     try {
       const res = await getTodos(filter);
       setTodos(res.data);
@@ -28,11 +28,15 @@ export const TodoListPage: React.FC = () => {
       alert('Ошибка при получении задач');
       console.error('Ошибка при получении задач', error);
     }
-  };
+  }, [])
+
+  const handleTaskUpdate = useCallback(async ()=> {
+    await fetchTodos(activeTab)
+  }, [activeTab, fetchTodos])
 
   useEffect(() => {
     fetchTodos(activeTab);
-  }, [activeTab]);
+  }, [activeTab, fetchTodos]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,7 +44,7 @@ export const TodoListPage: React.FC = () => {
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [activeTab]);
+  }, [activeTab, fetchTodos]);
 
   return (
     <Card
@@ -59,7 +63,7 @@ export const TodoListPage: React.FC = () => {
       >
         Todo List
       </Title>
-      <TodoForm onTaskAdded={() => fetchTodos(activeTab)} />
+      <TodoForm onTaskAdded={handleTaskUpdate} />
       <TaskTabs
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -69,8 +73,8 @@ export const TodoListPage: React.FC = () => {
       />
       <TodoList
         todos={todos}
-        onTaskChanged={()=> fetchTodos(activeTab)}
-        onTaskDeleted={()=> fetchTodos(activeTab)}
+        onTaskChanged={handleTaskUpdate}
+        onTaskDeleted={handleTaskUpdate}
       />
     </Card>
   );
