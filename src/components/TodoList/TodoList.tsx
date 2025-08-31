@@ -9,7 +9,7 @@ interface TodoListProps {
   onTaskDeleted: () => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({
+export const TodoList: React.FC<TodoListProps> = React.memo(({
   todos,
   onTaskChanged,
   onTaskDeleted,
@@ -28,4 +28,4 @@ export const TodoList: React.FC<TodoListProps> = ({
       )}
     />
   );
-};
+})

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { addTodo } from '../../api/todoApi.ts';
-import {Form, message} from 'antd';
+import {Button, Form, message} from 'antd';
 import type {TodoFormValues} from "../../types/todo.ts";
 import {TaskTitleForm} from "../TaskTitleForm/TaskTitleForm.tsx";
 
@@ -16,11 +16,10 @@ export const TodoForm: React.FC<TodoFormProps> = ({ onTaskAdded }) => {
     try {
       setLoading(true);
       await addTodo({ title: values.title.trim(), isDone: false });
-      form.setFieldsValue({ title: "" });
+      form.resetFields();
       onTaskAdded()
-    } catch (error) {
+    } catch {
       message.error('Ошибка при добавлении задачи');
-      console.error('Ошибка при добавлении задачи:', error);
     } finally {
       setLoading(false);
     }
@@ -30,9 +29,11 @@ export const TodoForm: React.FC<TodoFormProps> = ({ onTaskAdded }) => {
     <TaskTitleForm
       form={form}
       loading={loading}
-      onFinish={handleAdded}
-      isEditMode={false}
+      onSubmit={handleAdded}
       placeholder="What we plan to do?"
-    />
+    >
+      <Button htmlType="submit" loading={loading} type="primary">Add Task</Button>
+    </TaskTitleForm>
+
   );
 };

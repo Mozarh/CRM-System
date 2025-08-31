@@ -1,5 +1,7 @@
 import type {TodoFormValues} from "../../types/todo.ts";
 import {TaskTitleForm} from "../TaskTitleForm/TaskTitleForm.tsx";
+import {Button, Space} from "antd";
+import {CheckOutlined, CloseOutlined} from "@ant-design/icons";
 
 interface EdiTodoItemProps {
   initialTitle: string;
@@ -18,10 +20,15 @@ export const EditTodoItem: React.FC<EdiTodoItemProps> = ({
     <TaskTitleForm
       initialValue={initialTitle}
       loading={loading}
-      onFinish={onSave}
-      onCancel={onCancel}
-      isEditMode={true}
+      onSubmit={onSave}
       placeholder="Changing the task?"
-    />
+    >
+      <Space>
+        <Button htmlType="submit" loading={loading} type="primary" icon={<CheckOutlined />}/>
+        <Button onClick={onCancel} disabled={loading} icon={<CloseOutlined />} />
+      </Space>
+    </TaskTitleForm>
+
+
   )
 }

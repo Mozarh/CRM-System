@@ -24,9 +24,8 @@ export const TodoItem: React.FC<TodoProps> = React.memo(({
       setLoading(true);
       await updateTodo(task.id, { isDone: !task.isDone });
       onTaskChanged()
-    } catch (error) {
+    } catch {
       message.error('Ошибка при обновлении задачи');
-      console.error('Ошибка при обновлении задачи:', error);
     } finally {
       setLoading(false);
     }
@@ -37,9 +36,8 @@ export const TodoItem: React.FC<TodoProps> = React.memo(({
       setLoading(true);
       await deleteTodo(task.id);
       onTaskDeleted();
-    } catch (error) {
+    } catch {
       message.error('Ошибка при удалении задачи');
-      console.error('Ошибка при удалении задачи:', error);
     } finally {
       setLoading(false);
     }
@@ -51,9 +49,8 @@ export const TodoItem: React.FC<TodoProps> = React.memo(({
       await updateTodo(task.id, { title: values.title.trim() });
       setIsEditing(false);
       onTaskChanged()
-    } catch (error) {
+    } catch {
       message.error('Ошибка при редактировании задачи');
-      console.error('Ошибка при редактировании задачи:', error);
     } finally {
       setLoading(false);
     }
@@ -91,7 +88,7 @@ export const TodoItem: React.FC<TodoProps> = React.memo(({
       </p>
       <Space>
         <Button icon={<EditOutlined />} onClick={() => setIsEditing(true)} />
-        <Button icon={<DeleteOutlined />} onClick={handleDelete} style={{color: 'red'}} />
+        <Button icon={<DeleteOutlined />} onClick={handleDelete} danger />
       </Space>
     </>
   );

@@ -1,6 +1,7 @@
 import type { FilterStatus } from '../../types/todo.ts';
 import React from 'react';
 import {Tabs} from "antd";
+import {isFilterStatus} from "../../helpers/filterGuard.ts";
 
 interface TaskTabsProps {
   activeTab: FilterStatus;
@@ -10,7 +11,7 @@ interface TaskTabsProps {
   countInWork: number;
 }
 
-export const TaskTabs: React.FC<TaskTabsProps> = ({
+export const TaskTabs: React.FC<TaskTabsProps> = React.memo(({
   activeTab,
   setActiveTab,
   countAll,
@@ -23,13 +24,19 @@ export const TaskTabs: React.FC<TaskTabsProps> = ({
     {key: "completed", label: `Completed ${countDone}`},
   ];
 
+  const handleChange = (key:string) => {
+    if(isFilterStatus(key)) {
+      setActiveTab(key)
+    }
+  }
+
   return (
     <Tabs
       activeKey={activeTab}
-      onChange={(key) => setActiveTab(key as FilterStatus)}
+      onChange={handleChange}
       items={items}
       centered
       style={{ marginBottom: 25 }}
     />
   );
-};
+})

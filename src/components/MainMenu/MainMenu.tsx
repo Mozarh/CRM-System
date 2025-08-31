@@ -18,7 +18,7 @@ const items: MenuItem[] = [
 
 type MenuItem = GetProp<MenuProps, 'items'>[number];
 
-export const Sidebar: React.FC = () => {
+export const MainMenu: React.FC = () => {
   const navigate = useNavigate();
   const {pathname} = useLocation();
 

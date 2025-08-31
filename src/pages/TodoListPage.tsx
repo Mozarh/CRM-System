@@ -4,7 +4,7 @@ import { TaskTabs } from '../components/TaskTabs/TaskTabs.tsx';
 import type { FilterStatus, Todo, TodoInfo } from '../types/todo.ts';
 import { getTodos } from '../api/todoApi.ts';
 import { TodoList } from '../components/TodoList/TodoList.tsx';
-import { Card, Typography } from 'antd';
+import {Card, message, Typography} from 'antd';
 
 const { Title } = Typography;
 
@@ -17,34 +17,29 @@ export const TodoListPage: React.FC = () => {
     inWork: 0,
   });
 
-  const fetchTodos = useCallback(async (filter: FilterStatus) => {
+  const fetchTodos = useCallback(async () => {
     try {
-      const res = await getTodos(filter);
+      const res = await getTodos(activeTab);
       setTodos(res.data);
       if (res.info) {
         setCounts(res.info);
       }
-    } catch (error) {
-      alert('Ошибка при получении задач');
-      console.error('Ошибка при получении задач', error);
+    } catch {
+      message.error('Ошибка при получении задач');
     }
   }, [])
 
-  const handleTaskUpdate = useCallback(async ()=> {
-    await fetchTodos(activeTab)
-  }, [activeTab, fetchTodos])
+  const handleTaskUpdate = fetchTodos
 
   useEffect(() => {
-    fetchTodos(activeTab);
-  }, [activeTab, fetchTodos]);
+    fetchTodos();
+  }, [fetchTodos]);
+
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchTodos(activeTab);
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [activeTab, fetchTodos]);
+    const interval = setInterval(fetchTodos, 5000);
+    return () => clearInterval(interval);
+  }, [fetchTodos]);
 
   return (
     <Card

@@ -38,7 +38,6 @@ export async function updateTodo(id: number, data: TodoRequest): Promise<Todo> {
   return response.data
 }
 
-export async function deleteTodo(id: number): Promise<{ success: boolean }> {
+export async function deleteTodo(id: number): Promise<void> {
   await instance.delete(`/todos/${id}`);
-  return { success: true };
 }

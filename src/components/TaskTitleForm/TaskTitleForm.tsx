@@ -1,27 +1,23 @@
 import type {TodoFormValues} from "../../types/todo.ts";
-import {Button, Form, type FormInstance, Input, Space} from "antd";
-import {validationTodoTitle} from "../../helpers/validation.ts";
-import {CheckOutlined, CloseOutlined} from "@ant-design/icons";
+import { Form, type FormInstance, Input} from "antd";
 import React from "react";
 
 interface TaskTitleFormProps {
   form?: FormInstance<TodoFormValues>;
   initialValue?: string;
-  loading: boolean;
-  onFinish: (value: TodoFormValues) => void;
-  onCancel?: () => void;
-  isEditMode?: boolean;
+  loading?: boolean;
   placeholder?: string;
+  onSubmit: (value: TodoFormValues) => void;
+  children?: React.ReactNode;
 }
 
 export const TaskTitleForm: React.FC<TaskTitleFormProps> = ({
   initialValue = "",
   loading,
   form,
-  onFinish,
-  onCancel,
-  isEditMode = false,
+  onSubmit,
   placeholder,
+  children,
 }) => {
   const [ internalForm ] = Form.useForm<TodoFormValues>();
 
@@ -29,19 +25,16 @@ export const TaskTitleForm: React.FC<TaskTitleFormProps> = ({
     <Form
       form={ form ?? internalForm }
       layout="inline"
-      onFinish={onFinish}
+      onFinish={onSubmit}
       initialValues={{ title: initialValue }}
       style={{ width: '100%', marginBottom: 10 }}
     >
       <Form.Item
         name="title"
         rules={[
-          {
-            validator: async (_:unknown, value: string) => {
-              const errorMsg = validationTodoTitle(value);
-              return errorMsg ? Promise.reject(new Error(errorMsg)) : Promise.resolve();
-            }
-          }
+          {required: true, message: "This field is required"},
+          {min: 2, message: "The minimum text length is 2 characters"},
+          {max: 64, message: "The maximum text length is 64 characters"},
         ]}
         style={{ flexGrow: 1, marginBottom: 0 }}
       >
@@ -51,26 +44,7 @@ export const TaskTitleForm: React.FC<TaskTitleFormProps> = ({
         />
       </Form.Item>
 
-      <Form.Item>
-        <Space>
-          <Button
-            htmlType="submit"
-            loading={loading}
-            icon={ isEditMode ? <CheckOutlined /> : undefined }
-            type={ isEditMode ? "default" : "primary" }
-          >
-            { isEditMode ? "" : "Add Task" }
-          </Button>
-          {isEditMode && onCancel && (
-            <Button
-              disabled={loading}
-              icon={<CloseOutlined />}
-              onClick={onCancel}
-              style={{color: 'red'}}
-            />
-          )}
-        </Space>
-      </Form.Item>
+      {children && <Form.Item>{children}</Form.Item>}
     </Form>
   )
 }
