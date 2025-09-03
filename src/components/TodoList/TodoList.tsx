@@ -1,6 +1,7 @@
 import { TodoItem } from '../TodoItem/TodoItem.tsx';
 import React from 'react';
 import type { Todo } from '../../types/todo.ts';
+import {List} from "antd";
 
 interface TodoListProps {
   todos: Todo[];
@@ -8,21 +9,23 @@ interface TodoListProps {
   onTaskDeleted: () => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({
+export const TodoList: React.FC<TodoListProps> = React.memo(({
   todos,
   onTaskChanged,
   onTaskDeleted,
 }) => {
   return (
-    <div>
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          task={todo}
-          onTaskChanged={onTaskChanged}
-          onTaskDeleted={onTaskDeleted}
-        />
-      ))}
-    </div>
+    <List
+      dataSource={todos}
+      renderItem={(todo) => (
+        <List.Item key={todo.id}>
+          <TodoItem
+            task={todo}
+            onTaskChanged={onTaskChanged}
+            onTaskDeleted={onTaskDeleted}
+          />
+        </List.Item>
+      )}
+    />
   );
-};
+})
