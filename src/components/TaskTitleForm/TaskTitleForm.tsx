@@ -7,17 +7,15 @@ interface TaskTitleFormProps {
   initialValue?: string;
   loading?: boolean;
   placeholder?: string;
-  onSubmit: (value: TodoFormValues) => void;
-  children?: React.ReactNode;
+  onFinish: (value: TodoFormValues) => void;
 }
 
 export const TaskTitleForm: React.FC<TaskTitleFormProps> = ({
   initialValue = "",
   loading,
   form,
-  onSubmit,
+  onFinish,
   placeholder,
-  children,
 }) => {
   const [ internalForm ] = Form.useForm<TodoFormValues>();
 
@@ -25,9 +23,9 @@ export const TaskTitleForm: React.FC<TaskTitleFormProps> = ({
     <Form
       form={ form ?? internalForm }
       layout="inline"
-      onFinish={onSubmit}
+      onFinish={onFinish}
       initialValues={{ title: initialValue }}
-      style={{ width: '100%', marginBottom: 10 }}
+      style={{ width: '100%'}}
     >
       <Form.Item
         name="title"
@@ -43,8 +41,6 @@ export const TaskTitleForm: React.FC<TaskTitleFormProps> = ({
           disabled={loading}
         />
       </Form.Item>
-
-      {children && <Form.Item>{children}</Form.Item>}
     </Form>
   )
 }

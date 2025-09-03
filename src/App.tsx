@@ -6,8 +6,10 @@ import {MainLayout} from "./components/Layout/Layout.tsx";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainLayout><TodoListPage /></MainLayout>} />
-      <Route path="/profile" element={<MainLayout><ProfilePage /></MainLayout>} />
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<TodoListPage />}/>
+        <Route path="profile" element={<ProfilePage />} />
+      </Route>
     </Routes>
   )
 }

@@ -26,14 +26,19 @@ export const TodoForm: React.FC<TodoFormProps> = ({ onTaskAdded }) => {
   };
 
   return (
-    <TaskTitleForm
-      form={form}
-      loading={loading}
-      onSubmit={handleAdded}
-      placeholder="What we plan to do?"
-    >
-      <Button htmlType="submit" loading={loading} type="primary">Add Task</Button>
-    </TaskTitleForm>
-
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <TaskTitleForm
+        form={form}
+        onFinish={handleAdded}
+        placeholder="What we plan to do?"
+      />
+        <Button
+          loading={loading}
+          type="primary"
+          onClick={()=>form.submit()}
+        >
+          Add Task
+        </Button>
+    </div>
   );
 };
