@@ -1,4 +1,4 @@
-import type { FilterStatus } from '../../types/todo.ts';
+import type { FilterStatus } from '../../types/todoTypes.ts';
 import React from 'react';
 import {Tabs} from "antd";
 

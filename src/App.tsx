@@ -1,14 +1,20 @@
 import { TodoListPage } from './pages/TodoListPage.tsx';
-import {ProfilePage} from "./pages/ProfilePage.tsx";
+import {LoginPage} from "./pages/LoginPage.tsx";
 import { Routes, Route } from 'react-router-dom';
-import {MainLayout} from "./components/Layout/Layout.tsx";
+import {MainLayout} from "./components/Layout/MainLayout.tsx";
+import {RegisterPage} from "./pages/RegisterPage.tsx";
+import {PrivateRoute} from "./components/PrivateRoute/PrivateRoute.tsx";
+import {ProfileAccount} from "./components/ProfileAccount/ProfileAccount.tsx";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainLayout />}>
+      <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegisterPage />}/>
+
+      <Route path="/" element={<PrivateRoute><MainLayout /></PrivateRoute>}>
         <Route index element={<TodoListPage />}/>
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path='/account' element={<ProfileAccount />}/>
       </Route>
     </Routes>
   )

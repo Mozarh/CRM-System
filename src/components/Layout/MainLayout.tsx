@@ -11,7 +11,7 @@ export const MainLayout: React.FC =() => (
       <MainMenu />
     </Sider>
     <Layout>
-      <Content style={{display: 'flex', justifyContent: 'center', paddingTop: 10}}>
+      <Content style={{display: 'flex', justifyContent: 'center', }}>
         <Outlet />
       </Content>
     </Layout>

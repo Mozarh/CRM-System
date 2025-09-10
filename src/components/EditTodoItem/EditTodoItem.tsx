@@ -1,4 +1,4 @@
-import type {TodoFormValues} from "../../types/todo.ts";
+import type {TodoFormValues} from "../../types/todoTypes.ts";
 import {TaskTitleForm} from "../TaskTitleForm/TaskTitleForm.tsx";
 import {Button, Space, Form} from "antd";
 import {CheckOutlined, CloseOutlined} from "@ant-design/icons";

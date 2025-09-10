@@ -1,10 +1,10 @@
 import type {
   FilterStatus,
   MetaResponse,
-  Todo,
+  TodoTypes,
   TodoInfo,
   TodoRequest,
-} from '../types/todo.ts';
+} from '../types/todoTypes.ts';
 import axios from  'axios';
 
 const API_URL = 'https://easydev.club/api/v1';
@@ -17,8 +17,8 @@ const instance = axios.create({
 
 export async function getTodos(
   status?: FilterStatus
-): Promise<MetaResponse<Todo, TodoInfo>> {
-  const response = await instance.get<MetaResponse<Todo, TodoInfo>>(
+): Promise<MetaResponse<TodoTypes, TodoInfo>> {
+  const response = await instance.get<MetaResponse<TodoTypes, TodoInfo>>(
     `${API_URL}/todos`,
     {
       params: status && status !== "all" ? {filter: status}: undefined,
@@ -27,14 +27,14 @@ export async function getTodos(
   return response.data
 }
 
-export async function addTodo(data: TodoRequest): Promise<Todo> {
-  const response = await instance.post<Todo>(`/todos`, data)
+export async function addTodo(data: TodoRequest): Promise<TodoTypes> {
+  const response = await instance.post<TodoTypes>(`/todos`, data)
   return response.data
 }
 
 
-export async function updateTodo(id: number, data: TodoRequest): Promise<Todo> {
-  const response = await instance.put<Todo>(`/todos/${id}`, data)
+export async function updateTodo(id: number, data: TodoRequest): Promise<TodoTypes> {
+  const response = await instance.put<TodoTypes>(`/todos/${id}`, data)
   return response.data
 }
 

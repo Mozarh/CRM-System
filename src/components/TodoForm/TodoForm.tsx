@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { addTodo } from '../../api/todoApi.ts';
-import {Button, Form, message} from 'antd';
-import type {TodoFormValues} from "../../types/todo.ts";
-import {TaskTitleForm} from "../TaskTitleForm/TaskTitleForm.tsx";
+import { Button, Form, message } from 'antd';
+import type { TodoFormValues } from '../../types/todoTypes.ts';
+import { TaskTitleForm } from '../TaskTitleForm/TaskTitleForm.tsx';
 
 interface TodoFormProps {
   onTaskAdded: () => void;
@@ -17,7 +17,7 @@ export const TodoForm: React.FC<TodoFormProps> = ({ onTaskAdded }) => {
       setLoading(true);
       await addTodo({ title: values.title.trim(), isDone: false });
       form.resetFields();
-      onTaskAdded()
+      onTaskAdded();
     } catch {
       message.error('Ошибка при добавлении задачи');
     } finally {
@@ -32,13 +32,9 @@ export const TodoForm: React.FC<TodoFormProps> = ({ onTaskAdded }) => {
         onFinish={handleAdded}
         placeholder="What we plan to do?"
       />
-        <Button
-          loading={loading}
-          type="primary"
-          onClick={()=>form.submit()}
-        >
-          Add Task
-        </Button>
+      <Button loading={loading} type="primary" onClick={() => form.submit()}>
+        Add Task
+      </Button>
     </div>
   );
 };

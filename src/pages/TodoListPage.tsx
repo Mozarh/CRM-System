@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TodoForm } from '../components/TodoForm/TodoForm.tsx';
 import { TaskTabs } from '../components/TaskTabs/TaskTabs.tsx';
-import type { FilterStatus, Todo, TodoInfo } from '../types/todo.ts';
+import type { FilterStatus, TodoTypes, TodoInfo } from '../types/todoTypes.ts';
 import { getTodos } from '../api/todoApi.ts';
 import { TodoList } from '../components/TodoList/TodoList.tsx';
 import {Card, message, Typography} from 'antd';
@@ -9,7 +9,7 @@ import {Card, message, Typography} from 'antd';
 const { Title } = Typography;
 
 export const TodoListPage: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<TodoTypes[]>([]);
   const [activeTab, setActiveTab] = useState<FilterStatus>('all');
   const [counts, setCounts] = useState<TodoInfo>({
     all: 0,
@@ -27,7 +27,7 @@ export const TodoListPage: React.FC = () => {
     } catch {
       message.error('Ошибка при получении задач');
     }
-  }, [])
+  }, [activeTab])
 
   const handleTaskUpdate = fetchTodos
 

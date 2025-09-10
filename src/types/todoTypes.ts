@@ -1,6 +1,6 @@
 export type FilterStatus = 'all' | 'completed' | 'inWork';
 
-export interface Todo {
+export interface TodoTypes {
   id: number;
   title: string;
   created: string;
