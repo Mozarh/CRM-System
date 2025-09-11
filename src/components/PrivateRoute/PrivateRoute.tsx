@@ -18,13 +18,11 @@ export const PrivateRoute: React.FC<{children: React.ReactNode}> = ({children}) 
 
       try {
         const tokens = await refreshToken({refreshToken: refresh});
-        localStorage.setItem('accessToken', tokens.accessToken);
-        localStorage.setItem('refreshToken', tokens.refreshToken);
         setAuthToken(tokens.accessToken);
+        localStorage.setItem('refreshToken', tokens.refreshToken);
         setIsAuth(true);
       } catch (error) {
         console.error(error);
-        localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         setAuthToken(null);
         setIsAuth(false);

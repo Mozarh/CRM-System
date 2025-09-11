@@ -1,15 +1,10 @@
 import React from 'react'
 import {Button, type GetProp, Menu, type MenuProps} from "antd";
-import {ScheduleOutlined, UserOutlined, HarmonyOSOutlined, LogoutOutlined} from "@ant-design/icons";
+import {ScheduleOutlined, UserOutlined, LogoutOutlined} from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import {logout, setAuthToken} from "../../api/userApi.ts";
 
 const items: MenuItem[] = [
-  {
-    key: '/login',
-    icon: <HarmonyOSOutlined />,
-    label: 'Страница входа',
-  },
   {
     key: '/account',
     icon: <UserOutlined />,
@@ -36,7 +31,6 @@ export const MainMenu: React.FC = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       setAuthToken(null);
       navigate('/login');

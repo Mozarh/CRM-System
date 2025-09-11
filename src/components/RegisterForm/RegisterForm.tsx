@@ -1,25 +1,32 @@
 import { Button, Form, Input, Typography, message } from 'antd';
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import { Link } from 'react-router-dom';
 import type {UserRegistration} from "../../types/userTypes.ts";
 import {registerUser} from "../../api/userApi.ts";
+import {RegisterSuccess} from "../RegisterSuccess/RegisterSuccess.tsx";
 
 const { Text } = Typography;
 
 export const RegisterForm: React.FC = () => {
-  const navigate = useNavigate();
+  const [isRegister, setIsRegister] = useState(false);
 
-  const onFinish = async (values:UserRegistration & { confirmPassword: string } ) => {
+  const onFinish = async (
+    values:UserRegistration & { confirmPassword: string }
+  ) => {
     try {
       const { confirmPassword: _, ...data } = values;
       await registerUser(data);
+      setIsRegister(true);
       message.success("Успешная регистрация");
-      navigate('/login');
     } catch (err) {
       const error = err as Error
       message.error(error.message)
     }
   };
+
+  if(isRegister){
+    return <RegisterSuccess />
+  }
 
   return (
     <Form layout="vertical" onFinish={onFinish}>

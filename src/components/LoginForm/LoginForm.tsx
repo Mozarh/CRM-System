@@ -12,9 +12,9 @@ export const LoginForm: React.FC = () => {
   const onFinish = async (values:AuthData) => {
     try {
       const tokens = await loginUser(values);
-      localStorage.setItem("accessToken", tokens.accessToken);
-      localStorage.setItem("refreshToken", tokens.refreshToken);
+
       setAuthToken(tokens.accessToken);
+      localStorage.setItem("refreshToken", tokens.refreshToken);
 
       message.success("Успешная аутентификация");
       navigate('/');
