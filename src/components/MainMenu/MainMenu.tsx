@@ -2,7 +2,8 @@ import React from 'react'
 import {Button, type GetProp, Menu, type MenuProps} from "antd";
 import {ScheduleOutlined, UserOutlined, LogoutOutlined} from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import {logout, setAuthToken} from "../../api/userApi.ts";
+import {logout} from "../../api/userApi.ts";
+import {tokenManager} from "../../api/TokenManager.ts";
 
 const items: MenuItem[] = [
   {
@@ -32,7 +33,7 @@ export const MainMenu: React.FC = () => {
       console.error(err);
     } finally {
       localStorage.removeItem('refreshToken');
-      setAuthToken(null);
+      tokenManager.clearAccessToken()
       navigate('/login');
     }
   }

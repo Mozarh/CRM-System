@@ -6,6 +6,7 @@ import type {
   Token,
   UserRegistration
 } from "../types/userTypes.ts";
+import {tokenManager} from "./TokenManager.ts";
 
 const API_URL = 'https://easydev.club/api/v1';
 
@@ -15,13 +16,13 @@ const instance = axios.create({
   headers: { "Content-Type": "application/json" },
 })
 
-export function setAuthToken(token: string | null) {
-  if (token) {
-    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete instance.defaults.headers.common['Authorization'];
+instance.interceptors.request.use((config) => {
+  const token = tokenManager.getAccessToken()
+  if(token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
-}
+  return config;
+})
 
 export async function registerUser(data: UserRegistration): Promise<Profile> {
   try {

@@ -2,19 +2,25 @@ import { Button, Checkbox, Flex, Form, Input, Typography, message } from 'antd';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type {AuthData} from "../../types/userTypes.ts";
-import {loginUser, setAuthToken} from "../../api/userApi.ts";
+import {loginUser} from "../../api/userApi.ts";
+import {tokenManager} from "../../api/TokenManager.ts";
+import {useDispatch} from "react-redux";
+import {setAuthorized} from "../../store/authSlice.ts";
 
 const { Text } = Typography;
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onFinish = async (values:AuthData) => {
     try {
       const tokens = await loginUser(values);
 
-      setAuthToken(tokens.accessToken);
+      tokenManager.setAccessToken(tokens.accessToken)
       localStorage.setItem("refreshToken", tokens.refreshToken);
+
+      dispatch(setAuthorized(true))
 
       message.success("Успешная аутентификация");
       navigate('/');
