@@ -8,7 +8,7 @@ import {RegisterSuccess} from "../RegisterSuccess/RegisterSuccess.tsx";
 const { Text } = Typography;
 
 export const RegisterForm: React.FC = () => {
-  const [isRegister, setIsRegister] = useState(false);
+  const [isRegister, setIsRegister] = useState<boolean>(false);
 
   const onFinish = async (
     values:UserRegistration & { confirmPassword: string }

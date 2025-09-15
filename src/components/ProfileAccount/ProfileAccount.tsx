@@ -7,7 +7,7 @@ const { Text, Title } = Typography;
 
 export const ProfileAccount: React.FC = () => {
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchProfile = async () => {

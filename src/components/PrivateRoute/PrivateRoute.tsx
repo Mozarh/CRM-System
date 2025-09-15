@@ -8,7 +8,7 @@ import type {RootState} from "../../store";
 import {logout, setAuthorized} from "../../store/authSlice.ts";
 
 export const PrivateRoute: React.FC<{children: React.ReactNode}> = ({children}) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useDispatch();
   const isAuthorized = useSelector((state: RootState) => state.auth.isAuthorized)
 
