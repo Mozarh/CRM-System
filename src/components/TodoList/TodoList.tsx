@@ -1,10 +1,10 @@
 import { TodoItem } from '../TodoItem/TodoItem.tsx';
 import React from 'react';
-import type { TodoTypes } from '../../types/todoTypes.ts';
+import type { Todo } from '../../types/todo.ts';
 import {List} from "antd";
 
 interface TodoListProps {
-  todos: TodoTypes[];
+  todos: Todo[];
   onTaskChanged: () => void;
   onTaskDeleted: () => void;
 }

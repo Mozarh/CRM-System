@@ -1,5 +1,5 @@
 import {Layout} from "antd";
-import {MainMenu} from "../MainMenu/MainMenu.tsx";
+import {MainMenu} from "../components/MainMenu/MainMenu.tsx";
 import React from "react";
 import {Outlet} from "react-router-dom";
 

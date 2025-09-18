@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { addTodo } from '../../api/todoApi.ts';
+import { addTodo } from '../../api/todo.ts';
 import { Button, Form, message } from 'antd';
-import type { TodoFormValues } from '../../types/todoTypes.ts';
+import type { TodoFormValues } from '../../types/todo.ts';
 import { TaskTitleForm } from '../TaskTitleForm/TaskTitleForm.tsx';
 
 interface TodoFormProps {

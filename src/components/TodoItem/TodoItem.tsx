@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import type { TodoTypes, TodoFormValues } from '../../types/todoTypes.ts';
-import {deleteTodo, updateTodo} from "../../api/todoApi.ts";
+import type { Todo, TodoFormValues } from '../../types/todo.ts';
+import {deleteTodo, updateTodo} from "../../api/todo.ts";
 import {Button, Checkbox, message, Space} from "antd";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {EditTodoItem} from "../EditTodoItem/EditTodoItem.tsx";
 
 interface TodoProps {
-  task: TodoTypes;
+  task: Todo;
   onTaskChanged: () => void;
   onTaskDeleted: () => void;
 }

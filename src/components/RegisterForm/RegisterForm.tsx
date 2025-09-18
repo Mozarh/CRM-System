@@ -1,8 +1,8 @@
 import { Button, Form, Input, Typography, message } from 'antd';
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
-import type {UserRegistration} from "../../types/userTypes.ts";
-import {registerUser} from "../../api/userApi.ts";
+import type {UserRegistration} from "../../types/user.ts";
+import {registerUser} from "../../api/user.ts";
 import {RegisterSuccess} from "../RegisterSuccess/RegisterSuccess.tsx";
 
 const { Text } = Typography;

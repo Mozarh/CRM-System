@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { TodoForm } from '../components/TodoForm/TodoForm.tsx';
 import { TaskTabs } from '../components/TaskTabs/TaskTabs.tsx';
-import type { FilterStatus, TodoTypes, TodoInfo } from '../types/todoTypes.ts';
-import { getTodos } from '../api/todoApi.ts';
+import type { FilterStatus, Todo, TodoInfo } from '../types/todo.ts';
+import { getTodos } from '../api/todo.ts';
 import { TodoList } from '../components/TodoList/TodoList.tsx';
 import {Card, message, Typography} from 'antd';
 
 const { Title } = Typography;
 
 export const TodoListPage: React.FC = () => {
-  const [todos, setTodos] = useState<TodoTypes[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [activeTab, setActiveTab] = useState<FilterStatus>('all');
   const [counts, setCounts] = useState<TodoInfo>({
     all: 0,

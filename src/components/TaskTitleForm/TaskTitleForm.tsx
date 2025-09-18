@@ -1,4 +1,4 @@
-import type {TodoFormValues} from "../../types/todoTypes.ts";
+import type {TodoFormValues} from "../../types/todo.ts";
 import { Form, type FormInstance, Input} from "antd";
 import React from "react";
 

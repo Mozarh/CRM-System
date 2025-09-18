@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
 import {Card, Typography, message, Spin} from "antd";
-import type {Profile} from "../../types/userTypes.ts";
-import {getProfile} from "../../api/userApi.ts";
+import type {Profile} from "../types/user.ts";
+import {getProfile} from "../api/user.ts";
 
 const { Text, Title } = Typography;
 
-export const ProfileAccount: React.FC = () => {
+export const ProfilePage: React.FC = () => {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
 

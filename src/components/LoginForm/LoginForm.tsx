@@ -1,8 +1,8 @@
 import { Button, Checkbox, Flex, Form, Input, Typography, message } from 'antd';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import type {AuthData} from "../../types/userTypes.ts";
-import {loginUser} from "../../api/userApi.ts";
+import type {AuthData} from "../../types/user.ts";
+import {loginUser} from "../../api/user.ts";
 import {tokenManager} from "../../api/TokenManager.ts";
 import {useDispatch} from "react-redux";
 import {setAuthorized} from "../../store/authSlice.ts";

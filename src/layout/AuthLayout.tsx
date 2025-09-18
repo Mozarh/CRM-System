@@ -1,19 +1,17 @@
 import React from 'react';
 import { Typography, Flex } from 'antd';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
-interface AuthLayoutProps {
-  children: React.ReactNode;
-  rightTitle: string;
-  rightSubtitle: string;
-}
+export const AuthLayout: React.FC = () => {
+  const location = useLocation();
+  const isLogin = location.pathname === '/login';
+  const rightTitle = isLogin ? "Login to your Account" : "Create your Account"
+  const rightSubtitle = isLogin
+    ? "See what is going on with your business"
+    : "Please fill in the form to continue"
 
-export const AuthLayout: React.FC<AuthLayoutProps> = ({
-  children,
-  rightTitle,
-  rightSubtitle,
-}) => {
   return (
     <Flex
       style={{ height: '100vh', backgroundColor: '#FFE6C9' }}
@@ -86,7 +84,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
               {rightSubtitle}
             </Text>
           </div>
-          {children}
+          <Outlet />
         </Flex>
       </Flex>
     </Flex>

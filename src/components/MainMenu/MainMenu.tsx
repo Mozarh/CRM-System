@@ -2,7 +2,7 @@ import React from 'react'
 import {Button, type GetProp, Menu, type MenuProps} from "antd";
 import {ScheduleOutlined, UserOutlined, LogoutOutlined} from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import {logout} from "../../api/userApi.ts";
+import {logout} from "../../api/user.ts";
 import {tokenManager} from "../../api/TokenManager.ts";
 
 const items: MenuItem[] = [

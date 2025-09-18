@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {refreshToken} from "../../api/userApi.ts";
+import {refreshToken} from "../../api/user.ts";
 import {Navigate} from "react-router-dom";
 import {Spin} from "antd";
 import {tokenManager} from "../../api/TokenManager.ts";
