@@ -1,5 +1,5 @@
 import {Layout} from "antd";
-import {MainMenu} from "../MainMenu/MainMenu.tsx";
+import {MainMenu} from "../components/MainMenu/MainMenu.tsx";
 import React from "react";
 import {Outlet} from "react-router-dom";
 
@@ -11,7 +11,7 @@ export const MainLayout: React.FC =() => (
       <MainMenu />
     </Sider>
     <Layout>
-      <Content style={{display: 'flex', justifyContent: 'center', paddingTop: 10}}>
+      <Content style={{display: 'flex', justifyContent: 'center', }}>
         <Outlet />
       </Content>
     </Layout>
